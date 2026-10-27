@@ -8,7 +8,9 @@ public class App { // Appというクラス
             String path = exchange.getRequestURI().getPath(); // アクセスされたパスを取り出す
             String message; // 返す文字を入れる変数
             if (path.equals("/hello")) { // パスが/helloか比べる
-                message = "こんにちは！";
+                String query = exchange.getRequestURI().getRawQuery(); // URLのクエリを取り出す
+                String name = query.substring(5); // name=の後ろを切り出す
+                message = "こんにちは、" + name + "さん！"; // 名前を応答に混ぜる
             } else if (path.equals("/bye")) { // パスが/byeか比べる
                 message = "さようなら！";
             } else {
