@@ -65,19 +65,25 @@ public class App { // Appというクラス
                 exchange.close(); // ★追加 通信を閉じる
                 return; // ★追加 この分岐を抜ける
             } else if (path.equals("/")) { // パスが/か比べる
-                String html = "<form method='post' action='/add'>"; // 入力フォームを始める
+                String html = "<!DOCTYPE html><html><head><meta charset='UTF-8'><style>body { max-width: 600px; margin: 20px auto; padding: 0 16px; font-size: 16px; }</style></head><body><h1>わたしのTodo</h1>"; // 変更：見出しと最小限のスタイルを追加
+                html += "<form method='post' action='/add'>"; // 入力フォームを始める
                 html += "<input name='todo'><button>追加</button></form>"; // 入力欄と追加ボタンを作る
-                html += "<ul>"; // Todo一覧を始める
-                for (Todo todo : todos) { // ★変更 Todoを1件ずつ取り出す
-                    String mark = ""; // ★変更 完了印を入れる変数
-                    if (todo.isDone()) { // ★変更 Todoが完了しているか比べる
-                        mark = " ✔"; // ★変更 完了印を付ける
+                if (todos.isEmpty()) { // 変更：一覧が空か確認
+                    html += "<p>やることは、いまゼロです</p>"; // 変更：空のときの表示を追加
+                } else { // 変更：Todoがあるときの表示
+                    html += "<ul>"; // Todo一覧を始める
+                    for (Todo todo : todos) { // ★変更 Todoを1件ずつ取り出す
+                        String mark = ""; // ★変更 完了印を入れる変数
+                        if (todo.isDone()) { // ★変更 Todoが完了しているか比べる
+                            mark = " ✔"; // ★変更 完了印を付ける
+                        }
+                        html += "<li>" + todo.getTitle() + mark + " <a href='/done?id=" + todo.getId()
+                                + "'>完了</a> <a href='/delete?id=" + todo.getId() + "'>削除</a></li>"; // ★追加
+                                                                                                    // Todoと完了・削除リンクをHTMLに追加する
                     }
-                    html += "<li>" + todo.getTitle() + mark + " <a href='/done?id=" + todo.getId()
-                            + "'>完了</a> <a href='/delete?id=" + todo.getId() + "'>削除</a></li>"; // ★追加
-                                                                                                // Todoと完了・削除リンクをHTMLに追加する
+                    html += "</ul>"; // Todo一覧を閉じる
                 }
-                html += "</ul>"; // Todo一覧を閉じる
+                html += "</body></html>"; // 変更：HTMLを閉じる
                 message = html; // 組み立てたHTMLを返す
                 exchange.getResponseHeaders().set("Content-Type", "text/html; charset=UTF-8"); // HTMLとして返す
             } else { // ★変更 該当しないパスの受け皿
