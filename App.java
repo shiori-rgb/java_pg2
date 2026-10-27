@@ -77,7 +77,7 @@ public class App { // Appというクラス
                         if (todo.isDone()) { // ★変更 Todoが完了しているか比べる
                             mark = " ✔"; // ★変更 完了印を付ける
                         }
-                        html += "<li>" + todo.getTitle() + mark + " <a href='/done?id=" + todo.getId()
+                        html += "<li>" + todo.getCat() + " " + todo.getTitle() + mark + " <a href='/done?id=" + todo.getId() // ★追加 Todoの前に猫マークを表示
                                 + "'>完了</a> <a href='/delete?id=" + todo.getId() + "'>削除</a></li>"; // ★追加
                                                                                                     // Todoと完了・削除リンクをHTMLに追加する
                     }
@@ -103,11 +103,14 @@ class Todo { // ★変更 Todoを表すクラス
     private final int id; // ★変更 Todoの番号
     private final String title; // ★変更 やること
     private boolean done; // ★変更 完了したかどうか
+    private final String cat; // ★追加 Todoに表示する猫マーク
 
     Todo(int id, String title) { // ★変更 Todoを作るコンストラクタ
         this.id = id; // ★変更 番号を保存
         this.title = title; // ★変更 やることを保存
         this.done = false; // ★変更 最初は未完了にする
+        String[] cats = {"🐱", "😸", "😻", "😽", "😹"}; // ★追加 猫マークの候補
+        this.cat = cats[(int) (Math.random() * cats.length)]; // ★追加 猫マークをランダムに選ぶ
     }
 
     int getId() { // ★変更 番号を読み出すメソッド
@@ -116,6 +119,10 @@ class Todo { // ★変更 Todoを表すクラス
 
     String getTitle() { // ★変更 やることを読み出すメソッド
         return title;
+    }
+
+    String getCat() { // ★追加 猫マークを読み出すメソッド
+        return cat;
     }
 
     boolean isDone() { // ★変更 完了状態を読み出すメソッド
